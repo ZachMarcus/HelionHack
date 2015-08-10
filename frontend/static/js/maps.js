@@ -4,51 +4,46 @@
 
 var map;
 var activeMap = null;
-var buildingMap;
 var boston = new google.maps.LatLng(42.3601, -71.0589);
 
 //
-// Data loaded from backend
+// Loads data from database
 //
 
-var buildingMapData  = [
-  {location: new google.maps.LatLng(37.782, -122.447), weight: 0.5},
-  new google.maps.LatLng(37.782, -122.445),
-  {location: new google.maps.LatLng(37.782, -122.443), weight: 2},
-  {location: new google.maps.LatLng(37.782, -122.441), weight: 3},
-  {location: new google.maps.LatLng(37.782, -122.439), weight: 2},
-  new google.maps.LatLng(37.782, -122.437),
-  {location: new google.maps.LatLng(37.782, -122.435), weight: 0.5},
+var dummyData = "37.782:-122.447;" +
+                "37.78:-122.445;"  +
+                "37.782:-122.443;" +
+                "37.782:-122.441;" +
+                "37.782:-122.439;" +
+                "37.782:-122.437;" +
+                "37.782:-122.435;" + 
+                "37.785:-122.447;" +
+                "37.785:-122.445;" +
+                "37.785:-122.443;" +
+                "37.785:-122.441;" + 
+                "37.785:-122.439;" +
+                "37.785:-122.437;" +
+                "37.785:-122.435;";
 
-  {location: new google.maps.LatLng(37.785, -122.447), weight: 3},
-  {location: new google.maps.LatLng(37.785, -122.445), weight: 2},
-  new google.maps.LatLng(37.785, -122.443),
-  {location: new google.maps.LatLng(37.785, -122.441), weight: 0.5},
-  new google.maps.LatLng(37.785, -122.439),
-  {location: new google.maps.LatLng(37.785, -122.437), weight: 2},
-  {location: new google.maps.LatLng(37.785, -122.435), weight: 3}
-];
-
-//
-// Data loading methods
-//
-
-//
-// Heatmap utility methods
-//
-
-function makeHeatMap(heatMapData) {
-  return new google.maps.visualization.HeatmapLayer({
-    data: heatMapData,
-});
-}
-
-function setHeatMapActive(heatMap) {
-  if (activeMap != null ) {
-    activeMap.setMap(null);
+function loadHMData(str_data) {
+  console.log(str_data);
+  pairs = str_data.split(';');
+  console.log(pairs);
+  result = [];
+  for (var i = 0, len = pairs.length; i < len; i++) {
+    if (pairs[i].length != 0) {
+      lat_lng = pairs[i].split(':');
+      console.log(lat_lng);
+      result.push(new google.maps.LatLng(parseFloat(lat_lng[0]),
+                                         parseFloat(lat_lng[1])));
+    }
   }
-  heatMap.setMap(map);
+  return result;
 }
+
+var buildingMap = new google.maps.visualization.HeatmapLayer({
+  data: loadHMData(dummyData),
+});
 
 //
 // Google maps UI
@@ -87,27 +82,16 @@ function CenterControl(controlDiv, map) {
       map.setCenter(boston);
   });
 
-  Button(controlUI, 'Building Permits ', function() {
-      buildingMap.setMap(map);
-  });
   
-/*
-  // Set CSS for the control interior
-  var controlText = document.createElement('div');
-  controlText.style.color = 'rgb(25,25,25)';
-  controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
-  controlText.style.fontSize = '16px';
-  controlText.style.lineHeight = '38px';
-  controlText.style.paddingLeft = '5px';
-  controlText.style.paddingRight = '5px';
-  controlText.innerHTML = 'Center Map';
-  controlUI.appendChild(controlText);
-
-  // Setup the click event listeners: simply set the map to
-  // Chicago
+  // Recenter Button
   google.maps.event.addDomListener(controlUI, 'click', function() {
     map.setCenter(boston)
-  });*/
+  });
+
+  // Show Building Permits
+  Button(controlUI, 'Building Permits ', function() {
+    buildingMap.setMap(buildingMap.getMap() ? null : map);
+  });
 }
 
 //
@@ -115,10 +99,11 @@ function CenterControl(controlDiv, map) {
 //
 
 function initialize() {
+  // Caputre map div
   var mapDiv = document.getElementById('map-canvas');
   var mapOptions = {
     zoom: 12,
-    center: boston, //new google.maps.LatLng(42.3601, -71.0589), // 42.3601° N, 71.0589° W
+    center: boston, // 42.3601° N, 71.0589° W
     mapTypeControl: false,
   }
   map = new google.maps.Map(mapDiv, mapOptions);
@@ -129,7 +114,6 @@ function initialize() {
   centerControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
 
-  buildingMap = makeHeatMap(buildingMapData);
   setHeatMapActive(buildingMap);
 }
 
