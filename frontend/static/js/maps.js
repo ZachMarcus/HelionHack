@@ -10,7 +10,7 @@ var boston = new google.maps.LatLng(42.3601, -71.0589);
 // Loads data from database
 //
 
-var dummyData = "37.782:-122.447;" +
+/*var dummyData = "37.782:-122.447;" +
                 "37.78:-122.445;"  +
                 "37.782:-122.443;" +
                 "37.782:-122.441;" +
@@ -24,6 +24,9 @@ var dummyData = "37.782:-122.447;" +
                 "37.785:-122.439;" +
                 "37.785:-122.437;" +
                 "37.785:-122.435;";
+*/
+
+
 
 function loadHMData(str_data) {
   console.log(str_data);
@@ -42,7 +45,7 @@ function loadHMData(str_data) {
 }
 
 var buildingMap = new google.maps.visualization.HeatmapLayer({
-  data: loadHMData(dummyData),
+  data: loadHMData(document.getElementById('data').dataset.row),
 });
 
 //

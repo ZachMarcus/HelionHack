@@ -1,1 +1,5 @@
 bottle
+requests
+mysql-connector-python
+urllib
+scipy
