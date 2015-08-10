@@ -51,7 +51,7 @@ var buildingMap = new google.maps.visualization.HeatmapLayer({
 
 function Button(parentElement, text, functionCallback) {
   var button = document.createElement('a');
-  button.className = 'btn btn-default btn-circle';
+  button.className = 'btn btn-default btn-circle control-button';
   button.innerHTML = text;
   parentElement.appendChild(button);
 
@@ -62,32 +62,17 @@ function Button(parentElement, text, functionCallback) {
   google.maps.event.addDomListener(button, 'click', functionCallback);
 }
 
+// Control for custom widget
 function CenterControl(controlDiv, map) { 
-
   // Set CSS for the control border
   var controlUI = document.createElement('div');
-  controlUI.style.backgroundColor = '#fff';
-  controlUI.style.border = '2px solid #fff';
-  controlUI.style.borderRadius = '3px';
-  controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
-  controlUI.style.cursor = 'pointer';
-  controlUI.style.marginBottom = '22px';
-  controlUI.style.textAlign = 'center';
-  controlUI.title = 'Click to recenter the map';
-  controlUI.style.width = '200px';
-
+  controlUI.title = 'Control Panel';
   controlDiv.appendChild(controlUI);
-
+  
+  // Center Button
   Button(controlUI, 'Center ', function() {
       map.setCenter(boston);
   });
-
-  
-  // Recenter Button
-  google.maps.event.addDomListener(controlUI, 'click', function() {
-    map.setCenter(boston)
-  });
-
   // Show Building Permits
   Button(controlUI, 'Building Permits ', function() {
     buildingMap.setMap(buildingMap.getMap() ? null : map);
