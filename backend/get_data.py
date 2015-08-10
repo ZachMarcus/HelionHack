@@ -3,6 +3,27 @@ Database"""
 
 import requests
 import mysql.connector
+import os
+import urllib.parse
+
+
+##################  DB INFO
+DATABASE_URL = os.getenv('DATABASE_URL')
+db_info = {}
+url = urllib.parse.urlparse(DATABASE_URL)
+db_info['default'] = {
+        'NAME': url.path[1:],
+        'USER': url.username,
+        'HOST': url.hostname,
+        'PASSWORD': url.password,
+        'PORT': url.port,
+        }
+db_name = db_info['default']['NAME']
+db_user = db_info['default']['USER']
+db_password = db_info['default']['PASSWORD']
+db_port = db_info['default']['PORT']
+#################### DB INFO
+
 
 x_app_token = "WufOy5JwfKNPI1xmcQrK51bUb"
 
@@ -11,12 +32,12 @@ url_building_permits = "https://data.cityofboston.gov/resource/hfgw-p5wb.json"
 request_building_permits = requests.get(url_building_permits, 
         headers={"X-App-Token":x_app_token})
 
-print(request_building_permits.json()[0])
+#print(request_building_permits.json()[0])
 
-conn = MySQLdb.connect(host="localhost", 
-                    user="test", 
-                    passwd="test", 
-                    db="hphackday")
+conn = mysql.connector.connect(user=db_user,
+                               password=db_password,
+                               host=db_host,
+                               database=db_name)
 
 cur = conn.cursor()
 
@@ -31,8 +52,8 @@ cur.execute('CREATE TABLE IF NOT EXISTS '\
 for e in request_building_permits.json():
     # Insert JSON data into building permit table
     cur.execute('INSERT OR IGNORE INTO BUILDING_PERMITS '\
-	        'VALUES(, %d, \'%s\', \'%s\', %d, %d, %d, %d, \'%s\', '\
-                '%d, %d, \'%s\', %d, %d, %d, %d);'
+	        'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, '\
+                '%s, %s, %s, %s, %s, %s, %s, %s, %s);'
                 % (e['zip'], e['description'], e['city'], e['state'], e['status'],
                 e['location'], e['coordinates'], e['owner'], e['issued_date'],
                 e['applicant'], e['property_id'], e['address'], e['sq_feet'], 
