@@ -1,6 +1,7 @@
 import os
 import sys
-from bottle import route, run, template
+from bottle import route, view, run, template, static_file
+#from bottle.Bottle import get_url
 
 print("Running using: %s" % sys.executable)
 
@@ -24,15 +25,13 @@ html_template = r'''
 </body>
 '''
 
-
-maps_page = r'''
-<div id="map-canvas">
-    <p> hello world! </p>
-</div>
-'''
+@route('/static/:path#.+#', name='static')
+def static(path):
+    return static_file(path, root='static')
 
 @route('/')
+@view('index')
 def index():
-    return template(maps_page, envlist=os.environ)
+    return # { 'get_url': get_url } #template(maps_page, envlist=os.environ)
 
 run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
