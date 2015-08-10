@@ -49,14 +49,19 @@ var buildingMap = new google.maps.visualization.HeatmapLayer({
 // Google maps UI
 //
 
-function Button(parentElement, text, functionCallback) {
-  var button = document.createElement('a');
-  button.className = 'btn btn-default btn-circle control-button';
-  button.innerHTML = text;
+function Button(parentElement, text, glyphClass, functionCallback) {
+  var button = document.createElement('button');
+  button.className = 'btn btn-default control-button';
   parentElement.appendChild(button);
 
+  var textEl = document.createElement('p');
+  textEl.className = 'control-text';
+  textEl.innerHTML = text;
+  button.appendChild(textEl);
+
   var icon = document.createElement('span');
-  icon.className = 'glyphicon glyphicon-search';
+  console.log(glyphClass);
+  icon.className = 'glyphicon control-icon  glyphicon-' + glyphClass;
   button.appendChild(icon);
 
   google.maps.event.addDomListener(button, 'click', functionCallback);
@@ -67,14 +72,20 @@ function CenterControl(controlDiv, map) {
   // Set CSS for the control border
   var controlUI = document.createElement('div');
   controlUI.title = 'Control Panel';
+  controlUI.id = 'control';
+  controlUI.className = 'btn-group-vertical';
+  controlUI.role = 'group';
   controlDiv.appendChild(controlUI);
+
+  Button(controlUI, '<h1 style="color:lightgreen;"><small>City View</small> Boston</h1>', '', function(){});
   
   // Center Button
-  Button(controlUI, 'Center ', function() {
+  Button(controlUI, 'Center', 'search', function() {
       map.setCenter(boston);
   });
   // Show Building Permits
-  Button(controlUI, 'Building Permits ', function() {
+  Button(controlUI, 'Building Permits', 'home', function() {
+    activeMap = buildingMap;
     buildingMap.setMap(buildingMap.getMap() ? null : map);
   });
 }
@@ -98,8 +109,6 @@ function initialize() {
 
   centerControlDiv.index = 1;
   map.controls[google.maps.ControlPosition.TOP_RIGHT].push(centerControlDiv);
-
-  setHeatMapActive(buildingMap);
 }
 
 //

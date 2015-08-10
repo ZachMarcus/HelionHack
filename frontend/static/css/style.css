@@ -17,5 +17,14 @@ html, body, #map-canvas {
 }
 
 #control .control-button {
-  width: 90%;
+  width: 100%;
+  clear: both;
+}
+
+#control .control-text {
+  float: left;
+}
+
+#control .control-icon {
+  float: right;
 }
