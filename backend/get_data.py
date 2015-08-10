@@ -2,7 +2,7 @@
 Database"""
 
 import requests
-import MySQLdb
+import mysql.connector
 
 x_app_token = "WufOy5JwfKNPI1xmcQrK51bUb"
 
@@ -20,6 +20,7 @@ conn = MySQLdb.connect(host="localhost",
 
 cur = conn.cursor()
 
+# Create Building Permit Table
 cur.execute('CREATE TABLE IF NOT EXISTS '\
 	'BUILDING_PERMITS(zip, description, city, state, status, '\
         'location, coordinates, owner, issued_date, applicant, '\
@@ -27,7 +28,24 @@ cur.execute('CREATE TABLE IF NOT EXISTS '\
         'permit_number, occupancytype, permittypedesc, '\
         'expiration_date, declared_valuation, total_fees, worktype)')
 
-#cur.execute('
+for e in request_building_permits.json():
+    # Insert JSON data into building permit table
+    cur.execute('INSERT OR IGNORE INTO BUILDING_PERMITS '\
+	        'VALUES(, %d, \'%s\', \'%s\', %d, %d, %d, %d, \'%s\', '\
+                '%d, %d, \'%s\', %d, %d, %d, %d);'
+                % (e['zip'], e['description'], e['city'], e['state'], e['status'],
+                e['location'], e['coordinates'], e['owner'], e['issued_date'],
+                e['applicant'], e['property_id'], e['address'], e['sq_feet'], 
+                e['comments'], e['parcel_id'], e['permit_number'], e['occupancy'], 
+                e['permittypedesc'], e['expiration_date'],
+                e['declared_valuation'], e['total_fees'], e['worktype']))
+
+#cur.execute('CREATE TABLE IF NOT EXISTS '\
+#            'BUILDING_PERMITS(centroid, values)')
+
+#cur.execute('INSERT OR IGNORE INTO BUILDING_PERMITS '\
+#            'VALUES(%d, %s);' % (centroid, value_string))
+
 
 
 
