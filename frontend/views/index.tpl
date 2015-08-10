@@ -4,7 +4,7 @@
 </head>
 
 <body>
-  <div id="data" data-row="{{content}}"></div>
+  <div id="data" data-row="{{contents}}"></div>
   <div id="map-canvas">
   </div>
   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=visualization&sensor=true_or_false&language=en"></script>

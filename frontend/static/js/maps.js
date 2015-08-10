@@ -37,8 +37,8 @@ function loadHMData(str_data) {
     if (pairs[i].length != 0) {
       lat_lng = pairs[i].split(':');
       console.log(lat_lng);
-      result.push(new google.maps.LatLng(parseFloat(lat_lng[0]),
-                                         parseFloat(lat_lng[1])));
+      result.push(new google.maps.LatLng(parseFloat(lat_lng[1]),
+                                         parseFloat(lat_lng[0])));
     }
   }
   return result;
@@ -46,6 +46,7 @@ function loadHMData(str_data) {
 
 var buildingMap = new google.maps.visualization.HeatmapLayer({
   data: loadHMData(document.getElementById('data').dataset.row),
+  radius: 60,
 });
 
 //
