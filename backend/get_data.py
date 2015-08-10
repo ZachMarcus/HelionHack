@@ -66,7 +66,6 @@ for i in range(0, max(labels)):
             output += new
     contents += output
     
-print(contents)
 """Add data to table
 cur.execute('INSERT OR IGNORE INTO BUILDING_PERMITS '\
 VALUES(%d, %s);' % (i, output))"""
