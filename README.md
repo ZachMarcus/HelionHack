@@ -11,6 +11,6 @@
 
 
 ## The URL
-http://python-env-team1.15.126.139.173.xip.io/
+http://15.126.139.173.xip.io/
 
 
