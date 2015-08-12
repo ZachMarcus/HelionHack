@@ -1,2 +1,7 @@
 applications:
-- name: python-env-team1
+- name: backend
+  mem: 128M
+  services:
+    ${name}-db:
+      type: mysql
+    

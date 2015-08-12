@@ -1,3 +1,5 @@
-mysql.connector
+mysql-connector-python
 numpy
 scipy
+requests
+urlparse
