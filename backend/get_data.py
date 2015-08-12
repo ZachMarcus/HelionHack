@@ -6,7 +6,7 @@ import mysql.connector
 import os
 import urlparse
 from scipy.cluster.vq import kmeans2, whiten
-
+from bottle import run
 
 # Global Variables
 # This App Token is used for the SODA2 Database
@@ -33,6 +33,10 @@ def getDbInfo():
     db_host = db_info['default']['HOST']
     db_password = db_info['default']['PASSWORD']
     #db_port = db_info['default']['PORT']
+    print 'host = ' + db_host
+    print 'name = ' + db_name
+    print 'user = ' + db_user
+    print 'passwrd = ' + db_password
    
     return db_host, db_name, db_user, db_password
 
@@ -104,7 +108,7 @@ def ProcessBuildingPermits(cur):
     cur.execute("""CREATE TABLE IF NOT EXISTS BUILDING_PERMITS (
             centroids INT,
             vals VARCHAR(10000))""")
-
+    
     # Format Data for output and add to SQL Database
     for i in range(0, max(labels)):
         output = ''
@@ -128,8 +132,6 @@ def ProcessBuildingPermits(cur):
         #            (%s, %s)
         #        """, (i, output))
         conn.commit()
-        #cur.close()
-        #conn.close()
     
 def main():
     """Main function
@@ -142,10 +144,16 @@ def main():
     
     # Get Building Permit data and add to database
     ProcessBuildingPermits(cur)
-    return 0
+
+    cur.close()
+    conn.close()
+
+
 
 if __name__ == '__main__':
+    run(host='0.0.0.0', port=int(os.getenv("PORT", 8080)))
     main()
+
 
 
 
