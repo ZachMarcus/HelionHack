@@ -1,1 +1,3 @@
-bottle
+mysql.connector
+numpy
+scipy
